@@ -14,7 +14,8 @@ class RoomController extends Controller
      */
     public function index()
     {
-        return Room::paginate(20);
+        $rooms = Room::withCount(['bookings', 'activeBookings'])->paginate(20);
+        return view('rooms.index', compact('rooms'));
     }
 
     /**
@@ -24,7 +25,7 @@ class RoomController extends Controller
      */
     public function create()
     {
-        //
+        return view('rooms.create');
     }
 
     /**
@@ -42,8 +43,8 @@ class RoomController extends Controller
             'is_available' => 'boolean',
         ]);
 
-        $room = Room::create($validated);
-        return response()->json($room, 201);
+        Room::create($validated);
+        return redirect()->route('rooms.index')->with('success', 'Room created successfully!');
     }
 
     /**
@@ -55,7 +56,7 @@ class RoomController extends Controller
     public function show($id)
     {
         $room = Room::withCount(['bookings', 'activeBookings'])->findOrFail($id);
-        return $room;
+        return view('rooms.show', compact('room'));
     }
 
     /**
@@ -66,7 +67,8 @@ class RoomController extends Controller
      */
     public function edit($id)
     {
-        //
+        $room = Room::findOrFail($id);
+        return view('rooms.edit', compact('room'));
     }
 
     /**
@@ -87,7 +89,7 @@ class RoomController extends Controller
         ]);
 
         $room->update($validated);
-        return $room;
+        return redirect()->route('rooms.index')->with('success', 'Room updated successfully!');
     }
 
     /**
@@ -100,6 +102,6 @@ class RoomController extends Controller
     {
         $room = Room::findOrFail($id);
         $room->delete();
-        return response()->noContent();
+        return redirect()->route('rooms.index')->with('success', 'Room deleted successfully!');
     }
 }
