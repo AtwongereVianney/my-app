@@ -8,109 +8,58 @@ use App\Models\Room;
 
 class BookingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return Booking::with(['student', 'room', 'payments'])->paginate(20);
+        $Booking = Booking::all();
+        return view('Booking.index', compact('Booking'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'room_id' => 'required|exists:rooms,id',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-        ]);
-
-        $room = Room::withCount(['activeBookings'])->findOrFail($validated['room_id']);
-        if ($room->active_bookings_count >= $room->capacity) {
-            return response()->json(['message' => 'Room capacity reached'], 422);
-        }
-
-        $booking = Booking::create([
-            'student_id' => $validated['student_id'],
-            'room_id' => $validated['room_id'],
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'] ?? null,
-            'status' => 'active',
-        ]);
-
-        return response()->json($booking->load(['student', 'room']), 201);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        return Booking::with(['student', 'room', 'payments'])->findOrFail($id);
+        $Booking = Booking::findOrFail($id);
+        return view('Booking.show', compact('Booking'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function create()
     {
-        //
+        return view('Booking.create');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function store(Request $request)
     {
-        $booking = Booking::findOrFail($id);
-        $validated = $request->validate([
-            'start_date' => 'sometimes|required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'status' => 'sometimes|required|in:active,completed,cancelled',
+        $request->validate([
+            // Add validation rules for your model fields
+            'field1' => 'required|string|max:255',
+            'field2' => 'required|email|unique:table_name',
         ]);
 
-        $booking->update($validated);
-        return $booking->fresh()->load(['student', 'room']);
+        Booking::create($request->all());
+        return redirect()->route('Booking.index')->with('success', 'Record created successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function edit($id)
+    {
+        $Booking = Booking::findOrFail($id);
+        return view('Booking.edit', compact('Booking'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $Booking = Booking::findOrFail($id);
+        
+        $request->validate([
+            // Add validation rules (include unique rule exception for updates)
+            'field2' => 'required|email|unique:table_name,field2,' . $Booking->id,
+        ]);
+
+        $Booking->update($request->all());
+        return redirect()->route('Booking.index')->with('success', 'Record updated successfully!');
+    }
+
     public function destroy($id)
     {
-        $booking = Booking::findOrFail($id);
-        $booking->delete();
-        return response()->noContent();
+        $Booking = Booking::findOrFail($id);
+        $Booking->delete();
+        return redirect()->route('Booking.index')->with('success', 'Record deleted successfully!');
     }
 }
