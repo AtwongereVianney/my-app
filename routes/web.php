@@ -29,5 +29,6 @@ Route::resource('rooms', RoomController::class);
 Route::resource('students', StudentController::class);
 Route::resource('bookings', BookingController::class);
 Route::resource('payments', PaymentController::class);
+Route::resource('Bookings', BookingController::class);
 
 
