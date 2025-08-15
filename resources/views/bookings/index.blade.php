@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-6">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-gray-800">Room Bookings</h1>
-        <a href="{{ route('booking.create') }}" 
+        <a href="{{ route('bookings.create') }}" 
            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
             <i class="fas fa-plus mr-2"></i>New Booking
         </a>
@@ -60,21 +60,21 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <a href="{{ route('booking.show', $booking->id) }}" 
+                                    <a href="{{ route('bookings.show', $booking->id) }}" 
                                        class="text-indigo-600 hover:text-indigo-900">View</a>
                                     
                                     @if($booking->status == 'active')
-                                        <a href="{{ route('booking.edit', $booking->id) }}" 
+                                        <a href="{{ route('bookings.edit', $booking->id) }}" 
                                            class="text-yellow-600 hover:text-yellow-900">Edit</a>
                                         
-                                        <form action="{{ route('booking.complete', $booking->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('bookings.complete', $booking->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="text-blue-600 hover:text-blue-900"
                                                     onclick="return confirm('Mark this booking as completed?')">Complete</button>
                                         </form>
                                         
-                                        <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('bookings.cancel', $booking->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="text-orange-600 hover:text-orange-900"
@@ -82,7 +82,7 @@
                                         </form>
                                     @endif
                                     
-                                    <form action="{{ route('booking.destroy', $booking->id) }}" method="POST" class="inline">
+                                    <form action="{{ route('bookings.destroy', $booking->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:text-red-900"
@@ -100,7 +100,7 @@
                     <i class="fas fa-bed text-6xl mb-4"></i>
                     <p>No bookings found.</p>
                 </div>
-                <a href="{{ route('booking.create') }}" 
+                <a href="{{ route('bookings.create') }}" 
                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
                     Create First Booking
                 </a>

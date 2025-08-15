@@ -7,13 +7,13 @@
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-gray-800">Booking Details</h1>
         <div class="space-x-2">
-            <a href="{{ route('booking.index') }}" 
+            <a href="{{ route('bookings.index') }}" 
                class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
                 <i class="fas fa-arrow-left mr-2"></i>Back to List
             </a>
             
             @if($booking->status == 'active')
-                <a href="{{ route('booking.edit', $booking->id) }}" 
+                <a href="{{ route('bookings.edit', $booking->id) }}" 
                    class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
                     <i class="fas fa-edit mr-2"></i>Edit
                 </a>
@@ -167,7 +167,7 @@
             <!-- Action Buttons -->
             @if($booking->status == 'active')
                 <div class="mt-8 pt-6 border-t border-gray-200 flex space-x-4">
-                    <form action="{{ route('booking.complete', $booking->id) }}" method="POST" class="inline">
+                    <form action="{{ route('bookings.complete', $booking->id) }}" method="POST" class="inline">
                         @csrf
                         @method('PATCH')
                         <button type="submit" 
@@ -177,7 +177,7 @@
                         </button>
                     </form>
                     
-                    <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" class="inline">
+                    <form action="{{ route('bookings.cancel', $booking->id) }}" method="POST" class="inline">
                         @csrf
                         @method('PATCH')
                         <button type="submit" 

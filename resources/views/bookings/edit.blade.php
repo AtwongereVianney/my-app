@@ -7,11 +7,11 @@
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-gray-800">Edit Booking #{{ $booking->id }}</h1>
         <div class="space-x-2">
-            <a href="{{ route('booking.show', $booking->id) }}" 
+            <a href="{{ route('bookings.show', $booking->id) }}" 
                class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
                 <i class="fas fa-eye mr-2"></i>View
             </a>
-            <a href="{{ route('booking.index') }}" 
+            <a href="{{ route('bookings.index') }}" 
                class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
                 <i class="fas fa-list mr-2"></i>Back to List
             </a>
@@ -25,7 +25,7 @@
             </h3>
         </div>
 
-        <form action="{{ route('booking.update', $booking->id) }}" method="POST" class="p-6">
+        <form action="{{ route('bookings.update', $booking->id) }}" method="POST" class="p-6">
             @csrf
             @method('PUT')
             
@@ -74,7 +74,7 @@
                                 {{ (old('room_id', $booking->room_id) == $room->id) ? 'selected' : '' }}>
                                 Room {{ $room->room_number }}
                                 @if(isset($room->building)) - {{ $room->building }} @endif
-                                @if(isset($room->monthly_rent)) (₦{{ number_format($room->monthly_rent) }}/month) @endif
+                                @if(isset($room->monthly_rent)) (â‚¦{{ number_format($room->monthly_rent) }}/month) @endif
                             </option>
                         @endforeach
                     </select>
@@ -132,7 +132,7 @@
 
             <!-- Submit Buttons -->
             <div class="mt-8 pt-6 border-t border-gray-200 flex justify-end space-x-4">
-                <a href="{{ route('booking.show', $booking->id) }}" 
+                <a href="{{ route('bookings.show', $booking->id) }}" 
                    class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200">
                     Cancel
                 </a>
