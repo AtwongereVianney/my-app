@@ -29,7 +29,7 @@ class BookingController extends Controller
     public function create()
     {
         $students = Student::all();
-        $rooms = Room::where('status', 'available')->get();
+        $rooms = Room::where('is_available', true)->get();
         
         // If your views are in bookings folder, use this:
         return view('bookings.create', compact('students', 'rooms'));
