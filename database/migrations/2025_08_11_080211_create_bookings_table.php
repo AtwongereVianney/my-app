@@ -21,6 +21,7 @@ class CreateBookingsTable extends Migration
         $table->date('end_date')->nullable();
         $table->enum('status', ['active', 'completed', 'cancelled'])->default('active');
         $table->timestamps();
+        $table->softDeletes(); // Add soft deletes
     });
 }
 

@@ -106,10 +106,10 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking)
     {
-        $booking->delete();
+        $booking->delete(); // This will now use soft delete
 
         return redirect()->route('bookings.index')
-            ->with('success', 'Booking deleted successfully.');
+            ->with('success', 'Booking moved to trash successfully.');
     }
 
     /**
@@ -132,5 +132,39 @@ class BookingController extends Controller
 
         return redirect()->back()
             ->with('success', 'Booking cancelled successfully.');
+    }
+
+    /**
+     * Restore a soft-deleted booking.
+     */
+    public function restore($id)
+    {
+        $booking = Booking::withTrashed()->findOrFail($id);
+        $booking->restore();
+
+        return redirect()->route('bookings.index')
+            ->with('success', 'Booking restored successfully.');
+    }
+
+    /**
+     * Permanently delete a booking.
+     */
+    public function forceDelete($id)
+    {
+        $booking = Booking::withTrashed()->findOrFail($id);
+        $booking->forceDelete();
+
+        return redirect()->route('bookings.index')
+            ->with('success', 'Booking permanently deleted.');
+    }
+
+    /**
+     * Show trashed bookings.
+     */
+    public function trashed()
+    {
+        $bookings = Booking::onlyTrashed()->with(['student', 'room'])->latest()->paginate(10);
+        
+        return view('bookings.trashed', compact('bookings'));
     }
 }

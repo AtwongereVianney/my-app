@@ -1,16 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Bookings - Hostel Management')
+@section('title', 'Trashed Bookings - Hostel Management')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><i class="fas fa-calendar-check"></i> Bookings</h1>
+    <h1><i class="fas fa-trash"></i> Trashed Bookings</h1>
     <div class="d-flex gap-2">
-        <a href="{{ route('bookings.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New Booking
-        </a>
-        <a href="{{ route('bookings.trashed') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-trash"></i> Trashed Bookings
+        <a href="{{ route('bookings.index') }}" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Active Bookings
         </a>
     </div>
 </div>
@@ -23,6 +20,12 @@
 @endif
 
 <div class="card">
+    <div class="card-header">
+        <h3 class="card-title mb-0">
+            <i class="fas fa-trash-alt"></i> Deleted Bookings
+        </h3>
+    </div>
+    
     <div class="card-body">
         @if($bookings->count() > 0)
             <div class="table-responsive">
@@ -35,6 +38,7 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Status</th>
+                            <th>Deleted At</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -74,41 +78,25 @@
                                 @endif
                             </td>
                             <td>
+                                <small class="text-muted">{{ $booking->deleted_at->format('M d, Y g:i A') }}</small>
+                            </td>
+                            <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('bookings.show', $booking) }}" class="btn btn-sm btn-outline-info">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
+                                    <form action="{{ route('bookings.restore', $booking->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-sm btn-outline-success" 
+                                                onclick="return confirm('Restore this booking?')">
+                                            <i class="fas fa-undo"></i> Restore
+                                        </button>
+                                    </form>
                                     
-                                    @if($booking->status == 'active')
-                                        <a href="{{ route('bookings.edit', $booking) }}" class="btn btn-sm btn-outline-warning">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        
-                                        <form action="{{ route('bookings.complete', $booking) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-sm btn-outline-success" 
-                                                    onclick="return confirm('Mark this booking as completed?')">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                        </form>
-                                        
-                                        <form action="{{ route('bookings.cancel', $booking) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-sm btn-outline-warning" 
-                                                    onclick="return confirm('Cancel this booking?')">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </form>
-                                    @endif
-                                    
-                                    <form action="{{ route('bookings.destroy', $booking) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('bookings.force-delete', $booking->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-outline-danger" 
-                                                onclick="return confirm('Are you sure you want to move this booking to trash?')">
-                                            <i class="fas fa-trash"></i>
+                                                onclick="return confirm('Are you sure you want to permanently delete this booking? This action cannot be undone.')">
+                                            <i class="fas fa-trash"></i> Delete Forever
                                         </button>
                                     </form>
                                 </div>
@@ -126,11 +114,11 @@
             @endif
         @else
             <div class="text-center py-5">
-                <i class="fas fa-calendar-check fa-3x text-muted mb-3"></i>
-                <h4 class="text-muted">No bookings found</h4>
-                <p class="text-muted">Start by creating your first booking.</p>
-                <a href="{{ route('bookings.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Add First Booking
+                <i class="fas fa-trash fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No deleted bookings found</h4>
+                <p class="text-muted">All deleted bookings will appear here.</p>
+                <a href="{{ route('bookings.index') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Active Bookings
                 </a>
             </div>
         @endif

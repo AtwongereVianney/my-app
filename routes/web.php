@@ -34,5 +34,10 @@ Route::resource('payments', PaymentController::class);
 Route::patch('/bookings/{booking}/complete', [BookingController::class, 'complete'])->name('bookings.complete');
 Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
 
+// Soft delete routes
+Route::get('/bookings/trashed', [BookingController::class, 'trashed'])->name('bookings.trashed');
+Route::patch('/bookings/{id}/restore', [BookingController::class, 'restore'])->name('bookings.restore');
+Route::delete('/bookings/{id}/force-delete', [BookingController::class, 'forceDelete'])->name('bookings.force-delete');
+
 
 
