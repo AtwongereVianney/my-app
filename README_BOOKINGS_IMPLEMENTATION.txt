@@ -107,7 +107,9 @@ $bookings = Booking::with(['student', 'room'])->latest()->paginate(10);
 - Edit active bookings
 - Complete bookings (sets end date to current time)
 - Cancel bookings
-- Delete bookings with confirmation
+- Soft delete bookings (moves to trash with deleted_at timestamp)
+- Restore soft-deleted bookings
+- Permanently delete bookings from trash
 
 ### 4. Performance Optimizations
 - Pagination (10 items per page)
@@ -164,6 +166,7 @@ database/
 - `end_date` (Date, nullable)
 - `status` (Enum: active, completed, cancelled)
 - `timestamps`
+- `deleted_at` (Timestamp, nullable) - Soft delete timestamp
 
 ### Students Table
 - `id` (Primary Key)
@@ -191,7 +194,9 @@ database/
 - **Edit**: Click edit icon (only for active bookings)
 - **Complete**: Click check icon to mark as completed
 - **Cancel**: Click X icon to cancel booking
-- **Delete**: Click trash icon to permanently delete
+- **Move to Trash**: Click trash icon to soft delete (moves to trash)
+- **Restore**: From trash page, click restore icon to bring back
+- **Delete Forever**: From trash page, click delete forever to permanently remove
 
 ## Technical Specifications
 
@@ -214,6 +219,7 @@ database/
 - Form validation
 - Database relationships
 - Pagination
+- Soft deletes with trash management
 - Search and filtering (ready for implementation)
 
 ## Future Enhancements
@@ -232,7 +238,10 @@ database/
 - [ ] Edit existing booking
 - [ ] Complete booking
 - [ ] Cancel booking
-- [ ] Delete booking
+- [ ] Soft delete booking (move to trash)
+- [ ] View trashed bookings
+- [ ] Restore booking from trash
+- [ ] Permanently delete booking from trash
 - [ ] Pagination navigation
 - [ ] Responsive design on mobile
 - [ ] Form validation
