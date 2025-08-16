@@ -14,13 +14,9 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::with(['student', 'room'])->latest()->get();
+        $bookings = Booking::with(['student', 'room'])->latest()->paginate(10);
         
-        // If your views are in bookings folder, use this:
         return view('bookings.index', compact('bookings'));
-        
-        // If your views are in booking folder, use this:
-        // return view('booking.index', compact('bookings'));
     }
 
     /**

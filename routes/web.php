@@ -29,7 +29,10 @@ Route::resource('rooms', RoomController::class);
 Route::resource('students', StudentController::class);
 Route::resource('bookings', BookingController::class);
 Route::resource('payments', PaymentController::class);
-Route::resource('bookings', BookingController::class);
+
+// Additional booking routes
+Route::patch('/bookings/{booking}/complete', [BookingController::class, 'complete'])->name('bookings.complete');
+Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
 
 
 

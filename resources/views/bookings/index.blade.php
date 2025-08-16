@@ -1,108 +1,131 @@
 @extends('layouts.app')
 
-@section('title', 'All Bookings')
+@section('title', 'Bookings - Hostel Management')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Room Bookings</h1>
-        <a href="{{ route('bookings.create') }}" 
-           class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
-            <i class="fas fa-plus mr-2"></i>New Booking
-        </a>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-calendar-check"></i> Bookings</h1>
+    <a href="{{ route('bookings.create') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add New Booking
+    </a>
+</div>
+
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+@endif
 
-    @if(session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6" role="alert">
-            <span class="block sm:inline">{{ session('success') }}</span>
-        </div>
-    @endif
-
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+<div class="card">
+    <div class="card-body">
         @if($bookings->count() > 0)
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th>ID</th>
+                            <th>Student</th>
+                            <th>Room</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody>
                         @foreach($bookings as $booking)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    #{{ $booking->id }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $booking->student->name ?? 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $booking->room->room_number ?? 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ \Carbon\Carbon::parse($booking->start_date)->format('M d, Y') }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $booking->end_date ? \Carbon\Carbon::parse($booking->end_date)->format('M d, Y') : 'Ongoing' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                        @if($booking->status == 'active') bg-green-100 text-green-800
-                                        @elseif($booking->status == 'completed') bg-blue-100 text-blue-800
-                                        @else bg-red-100 text-red-800 @endif">
-                                        {{ ucfirst($booking->status) }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <a href="{{ route('bookings.show', $booking->id) }}" 
-                                       class="text-indigo-600 hover:text-indigo-900">View</a>
+                        <tr>
+                            <td>
+                                <strong>#{{ $booking->id }}</strong>
+                            </td>
+                            <td>
+                                <strong>{{ $booking->student->name ?? 'N/A' }}</strong>
+                                @if($booking->student)
+                                    <br><small class="text-muted">{{ $booking->student->email ?? '' }}</small>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="badge bg-info">{{ $booking->room->room_number ?? 'N/A' }}</span>
+                                @if($booking->room)
+                                    <br><small class="text-muted">{{ ucfirst($booking->room->type) }}</small>
+                                @endif
+                            </td>
+                            <td>{{ \Carbon\Carbon::parse($booking->start_date)->format('M d, Y') }}</td>
+                            <td>
+                                @if($booking->end_date)
+                                    {{ \Carbon\Carbon::parse($booking->end_date)->format('M d, Y') }}
+                                @else
+                                    <span class="text-muted">Ongoing</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($booking->status == 'active')
+                                    <span class="badge bg-success">Active</span>
+                                @elseif($booking->status == 'completed')
+                                    <span class="badge bg-info">Completed</span>
+                                @else
+                                    <span class="badge bg-danger">Cancelled</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ route('bookings.show', $booking) }}" class="btn btn-sm btn-outline-info">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                     
                                     @if($booking->status == 'active')
-                                        <a href="{{ route('bookings.edit', $booking->id) }}" 
-                                           class="text-yellow-600 hover:text-yellow-900">Edit</a>
+                                        <a href="{{ route('bookings.edit', $booking) }}" class="btn btn-sm btn-outline-warning">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
                                         
-                                        <form action="{{ route('bookings.complete', $booking->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('bookings.complete', $booking) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="text-blue-600 hover:text-blue-900"
-                                                    onclick="return confirm('Mark this booking as completed?')">Complete</button>
+                                            <button type="submit" class="btn btn-sm btn-outline-success" 
+                                                    onclick="return confirm('Mark this booking as completed?')">
+                                                <i class="fas fa-check"></i>
+                                            </button>
                                         </form>
                                         
-                                        <form action="{{ route('bookings.cancel', $booking->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('bookings.cancel', $booking) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="text-orange-600 hover:text-orange-900"
-                                                    onclick="return confirm('Cancel this booking?')">Cancel</button>
+                                            <button type="submit" class="btn btn-sm btn-outline-warning" 
+                                                    onclick="return confirm('Cancel this booking?')">
+                                                <i class="fas fa-times"></i>
+                                            </button>
                                         </form>
                                     @endif
                                     
-                                    <form action="{{ route('bookings.destroy', $booking->id) }}" method="POST" class="inline">
+                                    <form action="{{ route('bookings.destroy', $booking) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900"
-                                                onclick="return confirm('Are you sure you want to delete this booking? This action cannot be undone.')">Delete</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                                onclick="return confirm('Are you sure you want to delete this booking?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-        @else
-            <div class="text-center py-12">
-                <div class="text-gray-500 text-lg mb-4">
-                    <i class="fas fa-bed text-6xl mb-4"></i>
-                    <p>No bookings found.</p>
+            
+            @if($bookings->hasPages())
+                <div class="d-flex justify-content-center">
+                    {{ $bookings->links() }}
                 </div>
-                <a href="{{ route('bookings.create') }}" 
-                   class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
-                    Create First Booking
+            @endif
+        @else
+            <div class="text-center py-5">
+                <i class="fas fa-calendar-check fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No bookings found</h4>
+                <p class="text-muted">Start by creating your first booking.</p>
+                <a href="{{ route('bookings.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add First Booking
                 </a>
             </div>
         @endif
