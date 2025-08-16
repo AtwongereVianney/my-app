@@ -1,38 +1,36 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Booking')
+@section('title', 'Edit Booking - Hostel Management')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Edit Booking #{{ $booking->id }}</h1>
-        <div class="space-x-2">
-            <a href="{{ route('bookings.show', $booking->id) }}" 
-               class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
-                <i class="fas fa-eye mr-2"></i>View
-            </a>
-            <a href="{{ route('bookings.index') }}" 
-               class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
-                <i class="fas fa-list mr-2"></i>Back to List
-            </a>
-        </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-edit"></i> Edit Booking #{{ $booking->id }}</h1>
+    <div class="d-flex gap-2">
+        <a href="{{ route('bookings.show', $booking) }}" class="btn btn-info">
+            <i class="fas fa-eye"></i> View
+        </a>
+        <a href="{{ route('bookings.index') }}" class="btn btn-secondary">
+            <i class="fas fa-list"></i> Back to List
+        </a>
     </div>
+</div>
 
-    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-        <div class="px-6 py-4 bg-gray-50 border-b">
-            <h3 class="text-lg font-semibold text-gray-800">
-                <i class="fas fa-edit mr-2"></i>Update Booking Information
-            </h3>
-        </div>
-
-        <form action="{{ route('bookings.update', $booking->id) }}" method="POST" class="p-6">
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title mb-0">
+            <i class="fas fa-edit"></i> Update Booking Information
+        </h3>
+    </div>
+    
+    <div class="card-body">
+        <form action="{{ route('bookings.update', $booking) }}" method="POST">
             @csrf
             @method('PUT')
             
             @if ($errors->any())
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                <div class="alert alert-danger">
                     <strong>Please fix the following errors:</strong>
-                    <ul class="mt-2 list-disc list-inside">
+                    <ul class="mb-0 mt-2">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -40,14 +38,14 @@
                 </div>
             @endif
 
-            <div class="grid md:grid-cols-2 gap-6">
+            <div class="row">
                 <!-- Student Selection -->
-                <div>
-                    <label for="student_id" class="block text-sm font-medium text-gray-700 mb-2">
-                        Select Student <span class="text-red-500">*</span>
+                <div class="col-md-6 mb-3">
+                    <label for="student_id" class="form-label">
+                        Select Student <span class="text-danger">*</span>
                     </label>
                     <select name="student_id" id="student_id" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('student_id') border-red-500 @enderror">
+                            class="form-select @error('student_id') is-invalid @enderror">
                         <option value="">Choose a student...</option>
                         @foreach($students as $student)
                             <option value="{{ $student->id }}" 
@@ -57,88 +55,83 @@
                         @endforeach
                     </select>
                     @error('student_id')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <!-- Room Selection -->
-                <div>
-                    <label for="room_id" class="block text-sm font-medium text-gray-700 mb-2">
-                        Select Room <span class="text-red-500">*</span>
+                <div class="col-md-6 mb-3">
+                    <label for="room_id" class="form-label">
+                        Select Room <span class="text-danger">*</span>
                     </label>
                     <select name="room_id" id="room_id" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('room_id') border-red-500 @enderror">
+                            class="form-select @error('room_id') is-invalid @enderror">
                         <option value="">Choose a room...</option>
                         @foreach($rooms as $room)
                             <option value="{{ $room->id }}" 
                                 {{ (old('room_id', $booking->room_id) == $room->id) ? 'selected' : '' }}>
-                                Room {{ $room->room_number }}
-                                @if(isset($room->building)) - {{ $room->building }} @endif
-                                @if(isset($room->monthly_rent)) (â‚¦{{ number_format($room->monthly_rent) }}/month) @endif
+                                Room {{ $room->room_number }} - {{ ucfirst($room->type) }} ({{ $room->capacity }} person(s))
                             </option>
                         @endforeach
                     </select>
                     @error('room_id')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-6 mt-6">
+            <div class="row">
                 <!-- Start Date -->
-                <div>
-                    <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">
-                        Start Date <span class="text-red-500">*</span>
+                <div class="col-md-6 mb-3">
+                    <label for="start_date" class="form-label">
+                        Start Date <span class="text-danger">*</span>
                     </label>
                     <input type="date" name="start_date" id="start_date" 
                            value="{{ old('start_date', $booking->start_date) }}" 
                            min="{{ date('Y-m-d') }}"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('start_date') border-red-500 @enderror">
+                           class="form-control @error('start_date') is-invalid @enderror">
                     @error('start_date')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <!-- End Date -->
-                <div>
-                    <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">
-                        End Date <span class="text-gray-500">(Optional)</span>
+                <div class="col-md-6 mb-3">
+                    <label for="end_date" class="form-label">
+                        End Date <span class="text-muted">(Optional)</span>
                     </label>
                     <input type="date" name="end_date" id="end_date" 
                            value="{{ old('end_date', $booking->end_date) }}"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('end_date') border-red-500 @enderror">
-                    <p class="mt-1 text-sm text-gray-500">Leave empty for ongoing booking</p>
+                           class="form-control @error('end_date') is-invalid @enderror">
+                    <div class="form-text">Leave empty for ongoing booking</div>
                     @error('end_date')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
             <!-- Status -->
-            <div class="mt-6">
-                <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                    Status
-                </label>
-                <select name="status" id="status" 
-                        class="w-full md:w-1/3 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="active" {{ old('status', $booking->status) == 'active' ? 'selected' : '' }}>Active</option>
-                    <option value="completed" {{ old('status', $booking->status) == 'completed' ? 'selected' : '' }}>Completed</option>
-                    <option value="cancelled" {{ old('status', $booking->status) == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                </select>
-                @error('status')
-                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                @enderror
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="active" {{ old('status', $booking->status) == 'active' ? 'selected' : '' }}>Active</option>
+                        <option value="completed" {{ old('status', $booking->status) == 'completed' ? 'selected' : '' }}>Completed</option>
+                        <option value="cancelled" {{ old('status', $booking->status) == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                    </select>
+                    @error('status')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
 
             <!-- Submit Buttons -->
-            <div class="mt-8 pt-6 border-t border-gray-200 flex justify-end space-x-4">
-                <a href="{{ route('bookings.show', $booking->id) }}" 
-                   class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200">
+            <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                <a href="{{ route('bookings.show', $booking) }}" class="btn btn-secondary">
                     Cancel
                 </a>
-                <button type="submit" 
-                        class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200">
-                    <i class="fas fa-save mr-2"></i>Update Booking
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Update Booking
                 </button>
             </div>
         </form>
