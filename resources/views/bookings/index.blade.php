@@ -5,14 +5,9 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1><i class="fas fa-calendar-check"></i> Bookings</h1>
-    <div class="d-flex gap-2">
-        <a href="{{ route('bookings.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New Booking
-        </a>
-        <a href="{{ route('bookings.trashed') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-trash"></i> Trashed Bookings
-        </a>
-    </div>
+    <a href="{{ route('bookings.create') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add New Booking
+    </a>
 </div>
 
 @if(session('success'))
