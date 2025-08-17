@@ -30,6 +30,20 @@ Route::resource('students', StudentController::class);
 Route::resource('bookings', BookingController::class);
 Route::resource('payments', PaymentController::class);
 
+// Additional payment routes
+Route::patch('/payments/{payment}/complete', [PaymentController::class, 'complete'])->name('payments.complete');
+Route::patch('/payments/{payment}/fail', [PaymentController::class, 'fail'])->name('payments.fail');
+Route::patch('/payments/{payment}/refund', [PaymentController::class, 'refund'])->name('payments.refund');
+
+// Soft delete routes
+Route::get('/payments/trashed', [PaymentController::class, 'trashed'])->name('payments.trashed');
+Route::patch('/payments/{id}/restore', [PaymentController::class, 'restore'])->name('payments.restore');
+Route::delete('/payments/{id}/force-delete', [PaymentController::class, 'forceDelete'])->name('payments.force-delete');
+
+// Booking payments and statistics
+Route::get('/bookings/{booking}/payments', [PaymentController::class, 'bookingPayments'])->name('payments.booking-payments');
+Route::get('/payments/statistics', [PaymentController::class, 'statistics'])->name('payments.statistics');
+
 // Additional booking routes
 Route::patch('/bookings/{booking}/complete', [BookingController::class, 'complete'])->name('bookings.complete');
 Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
