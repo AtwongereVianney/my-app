@@ -175,38 +175,143 @@
         @if($booking->status == 'active')
             <div class="mt-4 pt-3 border-top">
                 <div class="d-flex gap-2">
-                    <form action="{{ route('bookings.complete', $booking) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit" 
-                                class="btn btn-success"
-                                onclick="return confirm('Mark this booking as completed?')">
-                            <i class="fas fa-check"></i> Mark as Completed
-                        </button>
-                    </form>
+                    <button type="button" class="btn btn-success" 
+                            data-bs-toggle="modal" data-bs-target="#completeModal">
+                        <i class="fas fa-check"></i> Mark as Completed
+                    </button>
                     
-                    <form action="{{ route('bookings.cancel', $booking) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit" 
-                                class="btn btn-warning"
-                                onclick="return confirm('Cancel this booking?')">
-                            <i class="fas fa-times"></i> Cancel Booking
-                        </button>
-                    </form>
+                    <button type="button" class="btn btn-warning" 
+                            data-bs-toggle="modal" data-bs-target="#cancelModal">
+                        <i class="fas fa-times"></i> Cancel Booking
+                    </button>
                     
-                    <form action="{{ route('bookings.destroy', $booking) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" 
-                                class="btn btn-danger"
-                                onclick="return confirm('Are you sure you want to delete this booking?')">
-                            <i class="fas fa-trash"></i> Delete Booking
-                        </button>
-                    </form>
+                    <button type="button" class="btn btn-danger" 
+                            data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <i class="fas fa-trash"></i> Move to Trash
+                    </button>
                 </div>
             </div>
         @endif
+    </div>
+</div>
+
+<!-- Action Modals -->
+@if($booking->status == 'active')
+<!-- Complete Booking Modal -->
+<div class="modal fade" id="completeModal" tabindex="-1" aria-labelledby="completeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="completeModalLabel">
+                    <i class="fas fa-check text-success"></i> Complete Booking
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to mark this booking as <strong>completed</strong>?</p>
+                <div class="alert alert-info">
+                    <strong>Booking Details:</strong><br>
+                    <strong>Student:</strong> {{ $booking->student->name ?? 'N/A' }}<br>
+                    <strong>Room:</strong> {{ $booking->room->room_number ?? 'N/A' }}<br>
+                    <strong>Period:</strong> {{ $booking->start_date->format('M d, Y') }} - 
+                    @if($booking->end_date)
+                        {{ $booking->end_date->format('M d, Y') }}
+                    @else
+                        Ongoing
+                    @endif
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ route('bookings.complete', $booking) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i> Mark as Completed
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Booking Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">
+                    <i class="fas fa-times text-warning"></i> Cancel Booking
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to <strong>cancel</strong> this booking?</p>
+                <div class="alert alert-warning">
+                    <strong>Booking Details:</strong><br>
+                    <strong>Student:</strong> {{ $booking->student->name ?? 'N/A' }}<br>
+                    <strong>Room:</strong> {{ $booking->room->room_number ?? 'N/A' }}<br>
+                    <strong>Period:</strong> {{ $booking->start_date->format('M d, Y') }} - 
+                    @if($booking->end_date)
+                        {{ $booking->end_date->format('M d, Y') }}
+                    @else
+                        Ongoing
+                    @endif
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ route('bookings.cancel', $booking) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-times"></i> Cancel Booking
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Booking Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="fas fa-trash text-danger"></i> Move to Trash
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to move this booking to trash?</p>
+                <div class="alert alert-warning">
+                    <strong>Booking Details:</strong><br>
+                    <strong>Student:</strong> {{ $booking->student->name ?? 'N/A' }}<br>
+                    <strong>Room:</strong> {{ $booking->room->room_number ?? 'N/A' }}<br>
+                    <strong>Period:</strong> {{ $booking->start_date->format('M d, Y') }} - 
+                    @if($booking->end_date)
+                        {{ $booking->end_date->format('M d, Y') }}
+                    @else
+                        Ongoing
+                    @endif
+                </div>
+                <p class="text-muted"><small>This action will move the booking to trash. You can restore it later if needed.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ route('bookings.destroy', $booking) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Move to Trash
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
     </div>
 </div>
 @endsection
