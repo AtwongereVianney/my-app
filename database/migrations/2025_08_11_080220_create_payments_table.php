@@ -16,10 +16,14 @@ class CreatePaymentsTable extends Migration
     Schema::create('payments', function (Blueprint $table) {
         $table->id();
         $table->foreignId('booking_id')->constrained()->onDelete('cascade');
-        $table->decimal('amount', 8, 2);
+        $table->decimal('amount', 10, 2);
         $table->date('payment_date');
-        $table->string('payment_method');
+        $table->enum('payment_method', ['cash', 'bank_transfer', 'credit_card', 'mobile_money', 'check', 'other']);
+        $table->enum('status', ['pending', 'completed', 'failed', 'refunded'])->default('pending');
+        $table->string('reference_number')->nullable();
+        $table->text('notes')->nullable();
         $table->timestamps();
+        $table->softDeletes(); // Add soft deletes
     });
 }
 
