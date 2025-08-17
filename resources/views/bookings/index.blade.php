@@ -79,33 +79,21 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         
-                                        <form action="{{ route('bookings.complete', $booking) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-sm btn-outline-success" 
-                                                    onclick="return confirm('Mark this booking as completed?')">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-outline-success" 
+                                                data-bs-toggle="modal" data-bs-target="#completeModal{{ $booking->id }}">
+                                            <i class="fas fa-check"></i>
+                                        </button>
                                         
-                                        <form action="{{ route('bookings.cancel', $booking) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-sm btn-outline-warning" 
-                                                    onclick="return confirm('Cancel this booking?')">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-outline-warning" 
+                                                data-bs-toggle="modal" data-bs-target="#cancelModal{{ $booking->id }}">
+                                            <i class="fas fa-times"></i>
+                                        </button>
                                     @endif
                                     
-                                    <form action="{{ route('bookings.destroy', $booking) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" 
-                                                onclick="return confirm('Are you sure you want to move this booking to trash?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" 
+                                            data-bs-toggle="modal" data-bs-target="#deleteModal{{ $booking->id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                                 </td>
                             </tr>

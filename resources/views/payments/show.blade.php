@@ -166,45 +166,164 @@
         <div class="mt-4 pt-3 border-top">
             <div class="d-flex gap-2">
                 @if($payment->status == 'pending')
-                    <form action="{{ route('payments.complete', $payment) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit" 
-                                class="btn btn-success"
-                                onclick="return confirm('Mark this payment as completed?')">
-                            <i class="fas fa-check"></i> Mark as Completed
-                        </button>
-                    </form>
+                    <button type="button" class="btn btn-success" 
+                            data-bs-toggle="modal" data-bs-target="#completeModal">
+                        <i class="fas fa-check"></i> Mark as Completed
+                    </button>
                     
-                    <form action="{{ route('payments.fail', $payment) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit" 
-                                class="btn btn-danger"
-                                onclick="return confirm('Mark this payment as failed?')">
-                            <i class="fas fa-times"></i> Mark as Failed
-                        </button>
-                    </form>
+                    <button type="button" class="btn btn-danger" 
+                            data-bs-toggle="modal" data-bs-target="#failModal">
+                        <i class="fas fa-times"></i> Mark as Failed
+                    </button>
                 @endif
                 
                 @if($payment->status == 'completed')
-                    <form action="{{ route('payments.refund', $payment) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit" 
-                                class="btn btn-info"
-                                onclick="return confirm('Mark this payment as refunded?')">
-                            <i class="fas fa-undo"></i> Mark as Refunded
-                        </button>
-                    </form>
+                    <button type="button" class="btn btn-info" 
+                            data-bs-toggle="modal" data-bs-target="#refundModal">
+                        <i class="fas fa-undo"></i> Mark as Refunded
+                    </button>
                 @endif
                 
+                <button type="button" class="btn btn-danger" 
+                        data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <i class="fas fa-trash"></i> Move to Trash
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Modals -->
+<!-- Complete Payment Modal -->
+@if($payment->status == 'pending')
+<div class="modal fade" id="completeModal" tabindex="-1" aria-labelledby="completeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="completeModalLabel">
+                    <i class="fas fa-check text-success"></i> Complete Payment
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to mark this payment as <strong>completed</strong>?</p>
+                <div class="alert alert-info">
+                    <strong>Payment Details:</strong><br>
+                    <strong>Amount:</strong> ${{ number_format($payment->amount, 2) }}<br>
+                    <strong>Student:</strong> {{ $payment->booking->student->name ?? 'N/A' }}<br>
+                    <strong>Room:</strong> {{ $payment->booking->room->room_number ?? 'N/A' }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ route('payments.complete', $payment) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i> Mark as Completed
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fail Payment Modal -->
+<div class="modal fade" id="failModal" tabindex="-1" aria-labelledby="failModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="failModalLabel">
+                    <i class="fas fa-times text-danger"></i> Mark Payment as Failed
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to mark this payment as <strong>failed</strong>?</p>
+                <div class="alert alert-warning">
+                    <strong>Payment Details:</strong><br>
+                    <strong>Amount:</strong> ${{ number_format($payment->amount, 2) }}<br>
+                    <strong>Student:</strong> {{ $payment->booking->student->name ?? 'N/A' }}<br>
+                    <strong>Room:</strong> {{ $payment->booking->room->room_number ?? 'N/A' }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ route('payments.fail', $payment) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-times"></i> Mark as Failed
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+<!-- Refund Payment Modal -->
+@if($payment->status == 'completed')
+<div class="modal fade" id="refundModal" tabindex="-1" aria-labelledby="refundModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="refundModalLabel">
+                    <i class="fas fa-undo text-info"></i> Refund Payment
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to mark this payment as <strong>refunded</strong>?</p>
+                <div class="alert alert-info">
+                    <strong>Payment Details:</strong><br>
+                    <strong>Amount:</strong> ${{ number_format($payment->amount, 2) }}<br>
+                    <strong>Student:</strong> {{ $payment->booking->student->name ?? 'N/A' }}<br>
+                    <strong>Room:</strong> {{ $payment->booking->room->room_number ?? 'N/A' }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ route('payments.refund', $payment) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-info">
+                        <i class="fas fa-undo"></i> Mark as Refunded
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+<!-- Delete Payment Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="fas fa-trash text-danger"></i> Move to Trash
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to move this payment to trash?</p>
+                <div class="alert alert-warning">
+                    <strong>Payment Details:</strong><br>
+                    <strong>Amount:</strong> ${{ number_format($payment->amount, 2) }}<br>
+                    <strong>Student:</strong> {{ $payment->booking->student->name ?? 'N/A' }}<br>
+                    <strong>Room:</strong> {{ $payment->booking->room->room_number ?? 'N/A' }}<br>
+                    <strong>Status:</strong> <span class="badge {{ $payment->status_badge_class }}">{{ $payment->status_label }}</span>
+                </div>
+                <p class="text-muted"><small>This action will move the payment to trash. You can restore it later if needed.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <form action="{{ route('payments.destroy', $payment) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" 
-                            class="btn btn-danger"
-                            onclick="return confirm('Are you sure you want to move this payment to trash?')">
+                    <button type="submit" class="btn btn-danger">
                         <i class="fas fa-trash"></i> Move to Trash
                     </button>
                 </form>
