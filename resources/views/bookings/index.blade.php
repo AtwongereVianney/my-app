@@ -7,15 +7,15 @@
     <h1><i class="fas fa-calendar-check"></i> Bookings</h1>
     <a href="{{ route('bookings.create') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> Add New Booking
-    </a>
-</div>
+        </a>
+    </div>
 
-@if(session('success'))
+    @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+        </div>
+    @endif
 
 <div class="card">
     <div class="card-body">
@@ -38,19 +38,19 @@
                         <tr>
                             <td>
                                 <strong>#{{ $booking->id }}</strong>
-                            </td>
+                                </td>
                             <td>
                                 <strong>{{ $booking->student->name ?? 'N/A' }}</strong>
                                 @if($booking->student)
                                     <br><small class="text-muted">{{ $booking->student->email ?? '' }}</small>
                                 @endif
-                            </td>
+                                </td>
                             <td>
                                 <span class="badge bg-info">{{ $booking->room->room_number ?? 'N/A' }}</span>
                                 @if($booking->room)
                                     <br><small class="text-muted">{{ ucfirst($booking->room->type) }}</small>
                                 @endif
-                            </td>
+                                </td>
                             <td>{{ \Carbon\Carbon::parse($booking->start_date)->format('M d, Y') }}</td>
                             <td>
                                 @if($booking->end_date)
@@ -58,7 +58,7 @@
                                 @else
                                     <span class="text-muted">Ongoing</span>
                                 @endif
-                            </td>
+                                </td>
                             <td>
                                 @if($booking->status == 'active')
                                     <span class="badge bg-success">Active</span>
@@ -67,7 +67,7 @@
                                 @else
                                     <span class="badge bg-danger">Cancelled</span>
                                 @endif
-                            </td>
+                                </td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <a href="{{ route('bookings.show', $booking) }}" class="btn btn-sm btn-outline-info">
@@ -107,8 +107,8 @@
                                         </button>
                                     </form>
                                 </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
