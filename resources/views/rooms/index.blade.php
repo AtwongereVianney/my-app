@@ -76,7 +76,7 @@
             <div class="text-center py-5">
                 <i class="fas fa-bed fa-3x text-muted mb-3"></i>
                 <h4 class="text-muted">No rooms found</h4>
-                <p class="text-muted">Start by adding your first room.</p>
+                <p class="text-muted">Start by adding your first room..</p>
                 <a href="{{ route('rooms.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Add First Room
                 </a>
