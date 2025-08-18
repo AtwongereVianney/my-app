@@ -111,7 +111,7 @@
             <div class="text-center py-5">
                 <i class="fas fa-calendar-check fa-3x text-muted mb-3"></i>
                 <h4 class="text-muted">No bookings found</h4>
-                <p class="text-muted">Start by creating your first booking.</p>
+                <p class="text-muted">Start by creating your first booking..</p>
                 <a href="{{ route('bookings.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Add First Booking
                 </a>
