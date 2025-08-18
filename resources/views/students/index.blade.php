@@ -82,7 +82,7 @@
         <div class="card-body text-center py-5">
             <i class="fas fa-users fa-3x text-muted mb-3"></i>
             <h4>No Students Found</h4>
-            <p class="text-muted">There are no students registered yet.</p>
+            <p class="text-muted">There are no students registered yet..</p>
             <a href="{{ route('students.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add First Student
             </a>
