@@ -94,7 +94,7 @@
                     </label>
                     <select name="payment_method" id="payment_method" 
                             class="form-select @error('payment_method') is-invalid @enderror">
-                        <option value="">Choose payment method...</option>
+                        <option value="">Choose payment method..</option>
                         @foreach(App\Models\Payment::getPaymentMethodLabels() as $value => $label)
                             <option value="{{ $value }}" {{ old('payment_method') == $value ? 'selected' : '' }}>
                                 {{ $label }}
