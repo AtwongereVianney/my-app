@@ -59,7 +59,7 @@
                             <i class="fas fa-arrow-left"></i> Back to Rooms
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Create Room
+                            <i class="fas fa-save"></i> Create Room..
                         </button>
                     </div>
                 </form>
