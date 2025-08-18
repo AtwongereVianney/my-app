@@ -123,7 +123,7 @@
                     Cancel
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Create Booking
+                    <i class="fas fa-save"></i> Create a Booking
                 </button>
             </div>
         </form>
