@@ -10,9 +10,14 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('rooms.index') }}">
-                <i class="fas fa-building"></i> Hostel Management
-            </a>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-outline-light d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas" aria-label="Open sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="{{ route('rooms.index') }}">
+                    <i class="fas fa-building"></i> Hostel Management
+                </a>
+            </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -43,12 +48,25 @@
         </div>
     </nav>
 
+    <!-- Mobile Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarOffcanvasLabel"><i class="fas fa-building"></i> Hostel Management</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            @include('layouts.sidebar')
+        </div>
+    </div>
+
     <div class="container mt-4">
         <div class="row">
-            <div class="col-md-3 mb-4">
-                @include('layouts.sidebar')
+            <div class="col-lg-3 mb-4 d-none d-lg-block">
+                <div class="position-sticky" style="top: 1rem;">
+                    @include('layouts.sidebar')
+                </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-lg-9">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
