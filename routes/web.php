@@ -44,6 +44,7 @@ Route::delete('/payments/{id}/force-delete', [PaymentController::class, 'forceDe
 Route::get('/bookings/{booking}/payments', [PaymentController::class, 'bookingPayments'])->name('payments.booking-payments');
 Route::get('/payments/statistics', [PaymentController::class, 'statistics'])->name('payments.statistics');
 
+
 // Additional booking routes
 Route::patch('/bookings/{booking}/complete', [BookingController::class, 'complete'])->name('bookings.complete');
 Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
@@ -52,6 +53,7 @@ Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])
 Route::get('/bookings/trashed', [BookingController::class, 'trashed'])->name('bookings.trashed');
 Route::patch('/bookings/{id}/restore', [BookingController::class, 'restore'])->name('bookings.restore');
 Route::delete('/bookings/{id}/force-delete', [BookingController::class, 'forceDelete'])->name('bookings.force-delete');
+
 
 
 
