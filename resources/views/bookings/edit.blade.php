@@ -18,7 +18,7 @@
 <div class="card">
     <div class="card-header">
         <h3 class="card-title mb-0">
-            <i class="fas fa-edit"></i> Update Booking Information
+            <i class="fas fa-edit"></i> Update Booking Information.
         </h3>
     </div>
     
