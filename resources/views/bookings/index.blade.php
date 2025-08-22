@@ -113,7 +113,7 @@
                 <h4 class="text-muted">No bookings found</h4>
                 <p class="text-muted">Start by creating your first booking..</p>
                 <a href="{{ route('bookings.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Add First Booking
+                    <i class="fas fa-plus"></i> Add First Booking.
                 </a>
             </div>
         @endif
