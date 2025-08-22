@@ -182,7 +182,7 @@
                     
                     <button type="button" class="btn btn-warning" 
                             data-bs-toggle="modal" data-bs-target="#cancelModal">
-                        <i class="fas fa-times"></i> Cancel Booking
+                        <i class="fas fa-times"></i> Cancel Booking..
                     </button>
                     
                     <button type="button" class="btn btn-danger" 
