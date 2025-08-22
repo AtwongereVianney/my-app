@@ -13,7 +13,7 @@
             <i class="fas fa-users"></i> Students
         </a>
         <a href="{{ route('bookings.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('bookings.*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('bookings.*') ? 'page' : false }}">
-            <i class="fas fa-calendar-check"></i> Bookings
+            <i class="fas fa-calendar-check"></i> Bookings.
         </a>
         <a href="{{ route('payments.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('payments.*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('payments.*') ? 'page' : false }}">
             <i class="fas fa-money-bill"></i> Payments
