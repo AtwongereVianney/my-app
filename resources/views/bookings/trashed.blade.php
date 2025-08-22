@@ -7,7 +7,7 @@
     <h1><i class="fas fa-trash"></i> Trashed Bookings</h1>
     <div class="d-flex gap-2">
         <a href="{{ route('bookings.index') }}" class="btn btn-primary">
-            <i class="fas fa-arrow-left"></i> Back to Active Bookings
+            <i class="fas fa-arrow-left"></i> Back to Active Bookings..
         </a>
     </div>
 </div>
