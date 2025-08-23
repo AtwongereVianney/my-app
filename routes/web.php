@@ -18,8 +18,8 @@ use App\Http\Controllers\PaymentController;
 */
 
 Route::get('/', function () {
-    return redirect()->route('rooms.index');
-});
+    return view('welcome');
+})->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
