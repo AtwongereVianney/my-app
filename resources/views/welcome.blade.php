@@ -7,8 +7,8 @@
 <div class="text-center">
     <div class="mb-4">
         <i class="fas fa-building fa-4x text-primary"></i>
-    </div>
-    
+                </div>
+
     <h2 class="mb-4">Welcome to Hostel Management System</h2>
     <p class="text-muted mb-4">
         Manage your hostel rooms, students, bookings, and payments efficiently.
@@ -27,6 +27,6 @@
                 <i class="fas fa-user-plus"></i> Register
             </a>
         @endauth
-    </div>
-</div>
+                        </div>
+                    </div>
 @endsection
