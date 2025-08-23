@@ -24,3 +24,30 @@
     </div>
 </div>
 
+<!-- Authentication Section -->
+<div class="card shadow-sm mt-3">
+    <div class="card-header bg-light">
+        <strong><i class="fas fa-user"></i> Account</strong>
+    </div>
+    <div class="list-group list-group-flush">
+        @auth
+            <span class="list-group-item text-muted">
+                <i class="fas fa-user-circle"></i> Welcome, {{ Auth::user()->name }}
+            </span>
+            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                @csrf
+                <button type="submit" class="list-group-item list-group-item-action text-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="list-group-item list-group-item-action">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a href="{{ route('register') }}" class="list-group-item list-group-item-action">
+                <i class="fas fa-user-plus"></i> Register
+            </a>
+        @endauth
+    </div>
+</div>
+
