@@ -3,15 +3,9 @@
 @section('title', 'Dashboard - Hostel Management')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-3">
-            @include('layouts.sidebar')
-        </div>
-        <div class="col-md-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1><i class="fas fa-gauge"></i> Dashboard</h1>
-            </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-gauge"></i> Dashboard</h1>
+</div>
 
             <div class="row">
                 <div class="col-md-3 mb-4">
@@ -156,5 +150,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection
