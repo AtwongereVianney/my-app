@@ -36,7 +36,7 @@
         <!-- Email Address -->
         <div class="mb-3">
             <label for="email" class="form-label">
-                <i class="fas fa-envelope"></i> Email Address
+                <i class="fas fa-envelope"></i> Email Address.
             </label>
             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
                    name="email" value="{{ old('email') }}" required autocomplete="username">
