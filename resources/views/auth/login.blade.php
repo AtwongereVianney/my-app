@@ -65,7 +65,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <button type="submit" class="btn btn-primary w-100">
-                <i class="fas fa-sign-in-alt"></i> Log in
+                <i class="fas fa-sign-in-alt"></i> Log in here
             </button>
         </div>
 
