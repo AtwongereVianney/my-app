@@ -10,9 +10,6 @@
                 </div>
 
     <h2 class="mb-4">Welcome</h2>
-    <p class="text-muted mb-4">
-        Manage your hostel rooms, students, bookings, and payments efficiently.
-    </p>
     
     <div class="d-grid gap-2">
         @auth
