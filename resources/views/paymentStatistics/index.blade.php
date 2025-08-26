@@ -5,12 +5,12 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1><i class="fas fa-icon"></i> Payment Statistics</h1>
-    <a href="{{ route('modelnames.create') }}" class="btn btn-primary">
+    <a href="{{ route('Payment Statistics.create') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> Add New
     </a>
 </div>
 
-@if($modelnames->count() > 0)
+@if($Payment Statistics->count() > 0)
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
@@ -25,7 +25,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($modelnames as $item)
+                        @foreach($Payment Statistics as $item)
                             <tr>
                                 <td>{{ $item->id }}</td>
                                 <td>{{ $item->field1 }}</td>
