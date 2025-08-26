@@ -5,6 +5,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentStatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('students', StudentController::class);
     Route::resource('bookings', BookingController::class);
     Route::resource('payments', PaymentController::class);
+    Route::resource('modelnames', PaymentStatisticsController::class);
 
     // Additional payment routes
     Route::patch('/payments/{payment}/complete', [PaymentController::class, 'complete'])->name('payments.complete');
