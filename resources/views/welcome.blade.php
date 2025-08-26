@@ -9,7 +9,7 @@
         <i class="fas fa-building fa-4x text-primary"></i>
                 </div>
 
-    <h2 class="mb-4">Welcome to Hostel Management System</h2>
+    <h2 class="mb-4">Welcome</h2>
     <p class="text-muted mb-4">
         Manage your hostel rooms, students, bookings, and payments efficiently.
     </p>
