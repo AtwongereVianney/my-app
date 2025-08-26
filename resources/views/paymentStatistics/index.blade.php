@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><i class="fas fa-icon"></i> ModelNames</h1>
+    <h1><i class="fas fa-icon"></i> Payment Statistics</h1>
     <a href="{{ route('modelnames.create') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> Add New
     </a>
@@ -33,15 +33,15 @@
                                 <!-- Add more fields as needed -->
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="{{ route('modelnames.show', $item->id) }}" 
+                                        <a href="{{ route('Payment Statistics.show', $item->id) }}" 
                                            class="btn btn-outline-info">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('modelnames.edit', $item->id) }}" 
+                                        <a href="{{ route('Payment Statistics.edit', $item->id) }}" 
                                            class="btn btn-outline-warning">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('modelnames.destroy', $item->id) }}" 
+                                        <form action="{{ route('Payment Statistics.destroy', $item->id) }}" 
                                               method="POST" class="d-inline"
                                               onsubmit="return confirm('Are you sure?')">
                                             @csrf
@@ -64,7 +64,7 @@
         <div class="card-body text-center py-5">
             <i class="fas fa-icon fa-3x text-muted mb-3"></i>
             <h4>No Records Found</h4>
-            <a href="{{ route('modelnames.create') }}" class="btn btn-primary">
+            <a href="{{ route('Payment Statistics.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add First Record
             </a>
         </div>
