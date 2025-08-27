@@ -37,6 +37,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('payments', PaymentController::class);
     Route::resource('PaymentStatistics', PaymentStatisticsController::class);
 
+    // Payment statistics route
+    Route::get('/payment-statistics', [PaymentStatisticsController::class, 'index'])->name('paymentStatistics.index');
+
     // Additional payment routes
     Route::patch('/payments/{payment}/complete', [PaymentController::class, 'complete'])->name('payments.complete');
     Route::patch('/payments/{payment}/fail', [PaymentController::class, 'fail'])->name('payments.fail');
