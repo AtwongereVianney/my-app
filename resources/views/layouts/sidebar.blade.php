@@ -18,7 +18,7 @@
         <a href="{{ route('payments.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('payments.*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('payments.*') ? 'page' : false }}">
             <i class="fas fa-money-bill"></i> Payments
         </a>
-        <a href="{{ route('payments.statistics') }}" class="list-group-item list-group-item-action {{ request()->routeIs('payments.statistics') ? 'active' : '' }}" aria-current="{{ request()->routeIs('payments.statistics') ? 'page' : false }}">
+        <a href="{{ route('paymentStatistics.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('payments.statistics') ? 'active' : '' }}" aria-current="{{ request()->routeIs('payments.statistics') ? 'page' : false }}">
             <i class="fas fa-chart-bar"></i> Payment Statistics
         </a>
     </div>
