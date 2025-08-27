@@ -1,73 +1,24 @@
-@extends('layouts.app')
-
-@section('title', 'Payment Statistics')
+@extends('layouts.app') {{-- or whatever your main layout is --}}
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><i class="fas fa-icon"></i> Payment Statistics</h1>
-    <a href="{{ route('Payment Statistics.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Add New
-    </a>
+<div class="container">
+    <h1>Payment Statistics</h1>
+    
+    <div class="row">
+        <div class="col-md-12">
+            {{-- Your payment statistics content here --}}
+            @if(empty($paymentStatistics))
+                <p>No payment statistics available.</p>
+            @else
+                {{-- Display your statistics --}}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Statistics Overview</h5>
+                        {{-- Add your statistics display logic here --}}
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
 </div>
-
-@if($Payment Statistics->count() > 0)
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Field 1</th>
-                            <th>Field 2</th>
-                            <!-- Add more columns as needed -->
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($Payment Statistics as $item)
-                            <tr>
-                                <td>{{ $item->id }}</td>
-                                <td>{{ $item->field1 }}</td>
-                                <td>{{ $item->field2 }}</td>
-                                <!-- Add more fields as needed -->
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="{{ route('Payment Statistics.show', $item->id) }}" 
-                                           class="btn btn-outline-info">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{{ route('Payment Statistics.edit', $item->id) }}" 
-                                           class="btn btn-outline-warning">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form action="{{ route('Payment Statistics.destroy', $item->id) }}" 
-                                              method="POST" class="d-inline"
-                                              onsubmit="return confirm('Are you sure?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-@else
-    <div class="card">
-        <div class="card-body text-center py-5">
-            <i class="fas fa-icon fa-3x text-muted mb-3"></i>
-            <h4>No Records Found</h4>
-            <a href="{{ route('Payment Statistics.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add First Record
-            </a>
-        </div>
-    </div>
-@endif
 @endsection
