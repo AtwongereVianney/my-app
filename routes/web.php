@@ -35,18 +35,16 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('students', StudentController::class);
     Route::resource('bookings', BookingController::class);
     Route::resource('payments', PaymentController::class);
-    Route::resource('payment-statistics', PaymentStatisticsController::class)->names([
-        'index' => 'paymentStatistics.index',
-        'create' => 'paymentStatistics.create',
-        'store' => 'paymentStatistics.store',
-        'show' => 'paymentStatistics.show',
-        'edit' => 'paymentStatistics.edit',
-        'update' => 'paymentStatistics.update',
-        'destroy' => 'paymentStatistics.destroy',
-    ]);
+    // Payment Statistics routes
+    Route::get('/payment-statistics', [PaymentStatisticsController::class, 'index'])->name('paymentStatistics.index');
+    Route::get('/payment-statistics/create', [PaymentStatisticsController::class, 'create'])->name('paymentStatistics.create');
+    Route::post('/payment-statistics', [PaymentStatisticsController::class, 'store'])->name('paymentStatistics.store');
+    Route::get('/payment-statistics/{payment_statistic}', [PaymentStatisticsController::class, 'show'])->name('paymentStatistics.show');
+    Route::get('/payment-statistics/{payment_statistic}/edit', [PaymentStatisticsController::class, 'edit'])->name('paymentStatistics.edit');
+    Route::put('/payment-statistics/{payment_statistic}', [PaymentStatisticsController::class, 'update'])->name('paymentStatistics.update');
+    Route::delete('/payment-statistics/{payment_statistic}', [PaymentStatisticsController::class, 'destroy'])->name('paymentStatistics.destroy');
 
-    // Payment statistics route (keeping for backward compatibility)
-    Route::get('/payment-statistics', [PaymentStatisticsController::class, 'index'])->name('payment.statistics');
+
     Route::get('/payment-statistics/export', [PaymentStatisticsController::class, 'export'])->name('payments.export');
 
     // Optional: Additional routes for the quick actions in the view
