@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\PaymentStatistic;
+use App\Models\PaymentStatistics;
 
 class PaymentStatisticsController extends Controller
 {
     public function index(Request $request)
     {
         // Base query using Eloquent
-        $query = PaymentStatistic::query();
+        $query = PaymentStatistics::query();
         
         // Apply filters if provided
         if ($request->filled('status')) {
