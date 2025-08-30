@@ -15,6 +15,10 @@ class CreatePaymentStatisticsTable extends Migration
     {
         Schema::create('payment_statistics', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('payment_id');
+            $table->decimal('amount', 15, 2);
+            $table->string('currency', 3);
+            $table->enum('status', ['pending', 'completed', 'failed', 'refunded'])->default('pending');
             $table->timestamps();
         });
     }
