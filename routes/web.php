@@ -35,10 +35,17 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('students', StudentController::class);
     Route::resource('bookings', BookingController::class);
     Route::resource('payments', PaymentController::class);
-    Route::resource('PaymentStatistics', PaymentStatisticsController::class);
+    Route::resource('payment-statistics', PaymentStatisticsController::class)->names([
+        'index' => 'paymentStatistics.index',
+        'create' => 'paymentStatistics.create',
+        'store' => 'paymentStatistics.store',
+        'show' => 'paymentStatistics.show',
+        'edit' => 'paymentStatistics.edit',
+        'update' => 'paymentStatistics.update',
+        'destroy' => 'paymentStatistics.destroy',
+    ]);
 
-    // Payment statistics route
-    Route::get('/payment-statistics', [PaymentStatisticsController::class, 'index'])->name('paymentStatistics.index');
+    // Payment statistics route (keeping for backward compatibility)
     Route::get('/payment-statistics', [PaymentStatisticsController::class, 'index'])->name('payment.statistics');
     Route::get('/payment-statistics/export', [PaymentStatisticsController::class, 'export'])->name('payments.export');
 

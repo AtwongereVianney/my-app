@@ -36,7 +36,7 @@ class PaymentStatisticsController extends Controller
         // Calculate statistics
         $statistics = $this->calculateStatistics();
         
-        return view('payment-statistics', compact('paymentStatistics', 'statistics'));
+        return view('paymentStatistics.index', compact('paymentStatistics', 'statistics'));
     }
     
     private function calculateStatistics()
