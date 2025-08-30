@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PaymentStatistic;
 
 class PaymentStatisticsController extends Controller
 {
     public function index(Request $request)
     {
-        // Base query
-        $query = DB::table('payment_statistics');
+        // Base query using Eloquent
+        $query = PaymentStatistic::query();
         
         // Apply filters if provided
         if ($request->filled('status')) {
@@ -40,8 +41,8 @@ class PaymentStatisticsController extends Controller
     
     private function calculateStatistics()
     {
-        // Get all payment statistics
-        $allPayments = DB::table('payment_statistics')->get();
+        // Get all payment statistics using Eloquent
+        $allPayments = PaymentStatistic::all();
         
         if ($allPayments->isEmpty()) {
             return [
@@ -99,15 +100,17 @@ class PaymentStatisticsController extends Controller
             ];
         }
         
-        // Monthly data (last 6 months)
+        // Monthly data (last 6 months) - using PHP date functions instead of Carbon
         $monthlyData = [];
         for ($i = 5; $i >= 0; $i--) {
-            $date = Carbon::now()->subMonths($i);
-            $monthKey = $date->format('F Y');
+            $targetDate = date('Y-m-01', strtotime("-{$i} months"));
+            $monthKey = date('F Y', strtotime($targetDate));
+            $year = date('Y', strtotime($targetDate));
+            $month = date('m', strtotime($targetDate));
             
-            $monthlyPayments = $allPayments->filter(function ($payment) use ($date) {
-                $paymentDate = Carbon::parse($payment->created_at);
-                return $paymentDate->year === $date->year && $paymentDate->month === $date->month;
+            $monthlyPayments = $allPayments->filter(function ($payment) use ($year, $month) {
+                $paymentDate = strtotime($payment->created_at);
+                return date('Y', $paymentDate) == $year && date('m', $paymentDate) == $month;
             });
             
             if ($monthlyPayments->isNotEmpty()) {
@@ -136,8 +139,8 @@ class PaymentStatisticsController extends Controller
     
     public function export()
     {
-        // Export functionality - you can implement CSV/Excel export here
-        $payments = DB::table('payment_statistics')->get();
+        // Export functionality using Eloquent
+        $payments = PaymentStatistic::all();
         
         $filename = 'payment_statistics_' . date('Y_m_d_H_i_s') . '.csv';
         
