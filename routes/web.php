@@ -39,6 +39,18 @@ Route::middleware(['auth'])->group(function () {
 
     // Payment statistics route
     Route::get('/payment-statistics', [PaymentStatisticsController::class, 'index'])->name('paymentStatistics.index');
+    Route::get('/payment-statistics', [PaymentStatisticsController::class, 'index'])->name('payment.statistics');
+    Route::get('/payment-statistics/export', [PaymentStatisticsController::class, 'export'])->name('payments.export');
+
+    // Optional: Additional routes for the quick actions in the view
+    Route::get('/payments/failed', function() {
+        return redirect()->route('payment.statistics', ['status' => 'failed']);
+    })->name('payments.failed');
+
+    Route::get('/payments/refunds', function() {
+        return redirect()->route('payment.statistics', ['status' => 'refunded']);
+    })->name('payments.refunds');
+
 
     // Additional payment routes
     Route::patch('/payments/{payment}/complete', [PaymentController::class, 'complete'])->name('payments.complete');
