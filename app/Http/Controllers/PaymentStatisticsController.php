@@ -140,7 +140,7 @@ class PaymentStatisticsController extends Controller
     public function export()
     {
         // Export functionality using Eloquent
-        $payments = PaymentStatistic::all();
+        $payments = PaymentStatistics::all();
         
         $filename = 'payment_statistics_' . date('Y_m_d_H_i_s') . '.csv';
         
