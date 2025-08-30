@@ -42,7 +42,7 @@ class PaymentStatisticsController extends Controller
     private function calculateStatistics()
     {
         // Get all payment statistics using Eloquent
-        $allPayments = PaymentStatistic::all();
+        $allPayments = PaymentStatistics::all();
         
         if ($allPayments->isEmpty()) {
             return [
