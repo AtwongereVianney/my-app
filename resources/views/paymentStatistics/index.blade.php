@@ -8,7 +8,7 @@
         <div class="col-md-12">
             {{-- Your payment statistics content here --}}
             @if(empty($paymentStatistics))
-                <p>No payment statistics available.</p>
+                
             @else
                 {{-- Display your statistics --}}
                 <div class="card">
