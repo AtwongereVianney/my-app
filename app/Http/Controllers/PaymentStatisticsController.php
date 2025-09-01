@@ -10,11 +10,13 @@ class PaymentStatisticsController extends Controller
 {
     public function index(Request $request)
     {
-        // Sync payment statistics from real payment data
+        // Sync payment statistics from real payment data for the authenticated user
         $this->syncPaymentStatistics();
         
-        // Base query using Eloquent
-        $query = PaymentStatistics::query();
+        // Base query using Eloquent - filter by authenticated user
+        $query = PaymentStatistics::whereHas('payment.booking.student', function ($q) {
+            $q->where('user_id', auth()->id());
+        });
         
         // Apply filters if provided
         if ($request->filled('status')) {
@@ -37,7 +39,7 @@ class PaymentStatisticsController extends Controller
         $paymentStatistics = $query->orderBy('created_at', 'desc')
             ->paginate(20);
         
-        // Calculate statistics
+        // Calculate statistics for the authenticated user only
         $statistics = $this->calculateStatistics();
         
         return view('paymentStatistics.index', compact('paymentStatistics', 'statistics'));
@@ -45,8 +47,10 @@ class PaymentStatisticsController extends Controller
     
     private function syncPaymentStatistics()
     {
-        // Get all payments that don't have corresponding statistics
-        $payments = Payment::whereNotExists(function ($query) {
+        // Get all payments for the authenticated user that don't have corresponding statistics
+        $payments = Payment::whereHas('booking.student', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->whereNotExists(function ($query) {
             $query->select(\DB::raw(1))
                   ->from('payment_statistics')
                   ->whereRaw('payment_statistics.payment_id = payments.id');
@@ -66,8 +70,10 @@ class PaymentStatisticsController extends Controller
     
     private function calculateStatistics()
     {
-        // Get all payment statistics using Eloquent
-        $allPayments = PaymentStatistics::all();
+        // Get all payment statistics for the authenticated user only
+        $allPayments = PaymentStatistics::whereHas('payment.booking.student', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->get();
         
         if ($allPayments->isEmpty()) {
             return [
@@ -164,13 +170,15 @@ class PaymentStatisticsController extends Controller
     
     public function export()
     {
-        // Sync payment statistics from real payment data
+        // Sync payment statistics from real payment data for the authenticated user
         $this->syncPaymentStatistics();
         
-        // Export functionality using Eloquent
-        $payments = PaymentStatistics::all();
+        // Export functionality using Eloquent - filter by authenticated user
+        $payments = PaymentStatistics::whereHas('payment.booking.student', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->get();
         
-        $filename = 'payment_statistics_' . date('Y_m_d_H_i_s') . '.csv';
+        $filename = 'payment_statistics_' . auth()->user()->name . '_' . date('Y_m_d_H_i_s') . '.csv';
         
         $headers = [
             'Content-Type' => 'text/csv',
@@ -212,6 +220,11 @@ class PaymentStatisticsController extends Controller
             'status' => 'required|in:pending,completed,failed,refunded'
         ]);
 
+        // Ensure the payment belongs to the authenticated user
+        $payment = Payment::whereHas('booking.student', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->findOrFail($request->payment_id);
+
         PaymentStatistics::create($request->all());
 
         return redirect()->route('paymentStatistics.index')
@@ -220,22 +233,36 @@ class PaymentStatisticsController extends Controller
 
     public function show(PaymentStatistics $payment_statistic)
     {
+        // Ensure the payment statistic belongs to the authenticated user
+        $this->authorizePaymentStatistic($payment_statistic);
+        
         return view('paymentStatistics.show', compact('payment_statistic'));
     }
 
     public function edit(PaymentStatistics $payment_statistic)
     {
+        // Ensure the payment statistic belongs to the authenticated user
+        $this->authorizePaymentStatistic($payment_statistic);
+        
         return view('paymentStatistics.edit', compact('payment_statistic'));
     }
 
     public function update(Request $request, PaymentStatistics $payment_statistic)
     {
+        // Ensure the payment statistic belongs to the authenticated user
+        $this->authorizePaymentStatistic($payment_statistic);
+        
         $request->validate([
             'payment_id' => 'required|integer|exists:payments,id',
             'amount' => 'required|numeric|min:0',
             'currency' => 'required|string|size:3',
             'status' => 'required|in:pending,completed,failed,refunded'
         ]);
+
+        // Ensure the new payment also belongs to the authenticated user
+        $payment = Payment::whereHas('booking.student', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->findOrFail($request->payment_id);
 
         $payment_statistic->update($request->all());
 
@@ -245,9 +272,21 @@ class PaymentStatisticsController extends Controller
 
     public function destroy(PaymentStatistics $payment_statistic)
     {
+        // Ensure the payment statistic belongs to the authenticated user
+        $this->authorizePaymentStatistic($payment_statistic);
+        
         $payment_statistic->delete();
 
         return redirect()->route('paymentStatistics.index')
             ->with('success', 'Payment statistic deleted successfully.');
+    }
+
+    private function authorizePaymentStatistic(PaymentStatistics $payment_statistic)
+    {
+        $userOwnsStatistic = $payment_statistic->payment->booking->student->user_id === auth()->id();
+        
+        if (!$userOwnsStatistic) {
+            abort(403, 'You are not authorized to access this payment statistic.');
+        }
     }
 }

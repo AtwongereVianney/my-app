@@ -12,15 +12,17 @@ class PaymentObserver
      */
     public function created(Payment $payment): void
     {
-        // Create corresponding payment statistics
-        PaymentStatistics::create([
-            'payment_id' => $payment->id,
-            'amount' => $payment->amount,
-            'currency' => 'USD', // Default currency
-            'status' => $payment->status,
-            'created_at' => $payment->created_at,
-            'updated_at' => $payment->updated_at,
-        ]);
+        // Only create statistics if the payment belongs to a student with a user_id
+        if ($payment->booking->student->user_id) {
+            PaymentStatistics::create([
+                'payment_id' => $payment->id,
+                'amount' => $payment->amount,
+                'currency' => 'USD', // Default currency
+                'status' => $payment->status,
+                'created_at' => $payment->created_at,
+                'updated_at' => $payment->updated_at,
+            ]);
+        }
     }
 
     /**
@@ -28,25 +30,27 @@ class PaymentObserver
      */
     public function updated(Payment $payment): void
     {
-        // Update corresponding payment statistics
-        $statistics = PaymentStatistics::where('payment_id', $payment->id)->first();
-        
-        if ($statistics) {
-            $statistics->update([
-                'amount' => $payment->amount,
-                'status' => $payment->status,
-                'updated_at' => $payment->updated_at,
-            ]);
-        } else {
-            // If statistics don't exist, create them
-            PaymentStatistics::create([
-                'payment_id' => $payment->id,
-                'amount' => $payment->amount,
-                'currency' => 'USD',
-                'status' => $payment->status,
-                'created_at' => $payment->created_at,
-                'updated_at' => $payment->updated_at,
-            ]);
+        // Only update statistics if the payment belongs to a student with a user_id
+        if ($payment->booking->student->user_id) {
+            $statistics = PaymentStatistics::where('payment_id', $payment->id)->first();
+            
+            if ($statistics) {
+                $statistics->update([
+                    'amount' => $payment->amount,
+                    'status' => $payment->status,
+                    'updated_at' => $payment->updated_at,
+                ]);
+            } else {
+                // If statistics don't exist, create them
+                PaymentStatistics::create([
+                    'payment_id' => $payment->id,
+                    'amount' => $payment->amount,
+                    'currency' => 'USD',
+                    'status' => $payment->status,
+                    'created_at' => $payment->created_at,
+                    'updated_at' => $payment->updated_at,
+                ]);
+            }
         }
     }
 

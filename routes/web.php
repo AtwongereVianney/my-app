@@ -30,7 +30,7 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 // Protected routes - require authentication
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'user.data.access'])->group(function () {
     Route::resource('rooms', RoomController::class);
     Route::resource('students', StudentController::class);
     Route::resource('bookings', BookingController::class);

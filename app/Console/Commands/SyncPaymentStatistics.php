@@ -13,7 +13,7 @@ class SyncPaymentStatistics extends Command
      *
      * @var string
      */
-    protected $signature = 'payments:sync-statistics';
+    protected $signature = 'payments:sync-statistics {--user-id= : Sync statistics for a specific user ID}';
 
     /**
      * The console command description.
@@ -27,14 +27,29 @@ class SyncPaymentStatistics extends Command
      */
     public function handle()
     {
-        $this->info('Starting payment statistics sync...');
+        $userId = $this->option('user-id');
         
-        // Get all payments that don't have corresponding statistics
-        $payments = Payment::whereNotExists(function ($query) {
-            $query->select(\DB::raw(1))
-                  ->from('payment_statistics')
-                  ->whereRaw('payment_statistics.payment_id = payments.id');
-        })->get();
+        if ($userId) {
+            $this->info("Starting payment statistics sync for user ID: {$userId}...");
+            
+            // Get all payments for the specific user that don't have corresponding statistics
+            $payments = Payment::whereHas('booking.student', function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            })->whereNotExists(function ($query) {
+                $query->select(\DB::raw(1))
+                      ->from('payment_statistics')
+                      ->whereRaw('payment_statistics.payment_id = payments.id');
+            })->get();
+        } else {
+            $this->info('Starting payment statistics sync for all users...');
+            
+            // Get all payments that don't have corresponding statistics
+            $payments = Payment::whereNotExists(function ($query) {
+                $query->select(\DB::raw(1))
+                      ->from('payment_statistics')
+                      ->whereRaw('payment_statistics.payment_id = payments.id');
+            })->get();
+        }
         
         $count = 0;
         foreach ($payments as $payment) {
@@ -49,7 +64,11 @@ class SyncPaymentStatistics extends Command
             $count++;
         }
         
-        $this->info("Synced {$count} payment statistics from real payment data.");
+        if ($userId) {
+            $this->info("Synced {$count} payment statistics for user ID: {$userId}");
+        } else {
+            $this->info("Synced {$count} payment statistics for all users.");
+        }
         
         return 0;
     }
