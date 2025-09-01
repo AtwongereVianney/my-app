@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PaymentStatistics;
+use App\Models\Payment;
 
 class PaymentStatisticsController extends Controller
 {
     public function index(Request $request)
     {
+        // Sync payment statistics from real payment data
+        $this->syncPaymentStatistics();
+        
         // Base query using Eloquent
         $query = PaymentStatistics::query();
         
@@ -37,6 +41,27 @@ class PaymentStatisticsController extends Controller
         $statistics = $this->calculateStatistics();
         
         return view('paymentStatistics.index', compact('paymentStatistics', 'statistics'));
+    }
+    
+    private function syncPaymentStatistics()
+    {
+        // Get all payments that don't have corresponding statistics
+        $payments = Payment::whereNotExists(function ($query) {
+            $query->select(\DB::raw(1))
+                  ->from('payment_statistics')
+                  ->whereRaw('payment_statistics.payment_id = payments.id');
+        })->get();
+        
+        foreach ($payments as $payment) {
+            PaymentStatistics::create([
+                'payment_id' => $payment->id,
+                'amount' => $payment->amount,
+                'currency' => 'USD', // Default currency, you can modify this based on your needs
+                'status' => $payment->status,
+                'created_at' => $payment->created_at,
+                'updated_at' => $payment->updated_at,
+            ]);
+        }
     }
     
     private function calculateStatistics()
@@ -139,6 +164,9 @@ class PaymentStatisticsController extends Controller
     
     public function export()
     {
+        // Sync payment statistics from real payment data
+        $this->syncPaymentStatistics();
+        
         // Export functionality using Eloquent
         $payments = PaymentStatistics::all();
         
@@ -178,7 +206,7 @@ class PaymentStatisticsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'payment_id' => 'required|integer',
+            'payment_id' => 'required|integer|exists:payments,id',
             'amount' => 'required|numeric|min:0',
             'currency' => 'required|string|size:3',
             'status' => 'required|in:pending,completed,failed,refunded'
@@ -203,7 +231,7 @@ class PaymentStatisticsController extends Controller
     public function update(Request $request, PaymentStatistics $payment_statistic)
     {
         $request->validate([
-            'payment_id' => 'required|integer',
+            'payment_id' => 'required|integer|exists:payments,id',
             'amount' => 'required|numeric|min:0',
             'currency' => 'required|string|size:3',
             'status' => 'required|in:pending,completed,failed,refunded'
