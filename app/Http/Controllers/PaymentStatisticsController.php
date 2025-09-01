@@ -169,4 +169,57 @@ class PaymentStatisticsController extends Controller
         
         return response()->stream($callback, 200, $headers);
     }
+
+    public function create()
+    {
+        return view('paymentStatistics.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'payment_id' => 'required|integer',
+            'amount' => 'required|numeric|min:0',
+            'currency' => 'required|string|size:3',
+            'status' => 'required|in:pending,completed,failed,refunded'
+        ]);
+
+        PaymentStatistics::create($request->all());
+
+        return redirect()->route('paymentStatistics.index')
+            ->with('success', 'Payment statistic created successfully.');
+    }
+
+    public function show(PaymentStatistics $payment_statistic)
+    {
+        return view('paymentStatistics.show', compact('payment_statistic'));
+    }
+
+    public function edit(PaymentStatistics $payment_statistic)
+    {
+        return view('paymentStatistics.edit', compact('payment_statistic'));
+    }
+
+    public function update(Request $request, PaymentStatistics $payment_statistic)
+    {
+        $request->validate([
+            'payment_id' => 'required|integer',
+            'amount' => 'required|numeric|min:0',
+            'currency' => 'required|string|size:3',
+            'status' => 'required|in:pending,completed,failed,refunded'
+        ]);
+
+        $payment_statistic->update($request->all());
+
+        return redirect()->route('paymentStatistics.index')
+            ->with('success', 'Payment statistic updated successfully.');
+    }
+
+    public function destroy(PaymentStatistics $payment_statistic)
+    {
+        $payment_statistic->delete();
+
+        return redirect()->route('paymentStatistics.index')
+            ->with('success', 'Payment statistic deleted successfully.');
+    }
 }
