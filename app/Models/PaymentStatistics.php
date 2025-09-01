@@ -21,4 +21,9 @@ class PaymentStatistics extends Model
     protected $casts = [
         'amount' => 'decimal:2',
     ];
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
+    }
 }

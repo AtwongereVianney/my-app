@@ -41,6 +41,11 @@ class Payment extends Model
         return $this->hasOneThrough(Room::class, Booking::class, 'id', 'id', 'booking_id', 'room_id');
     }
 
+    public function statistics()
+    {
+        return $this->hasOne(PaymentStatistics::class);
+    }
+
     // Payment method labels
     public static function getPaymentMethodLabels()
     {
