@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PaymentStatistics;
 use App\Models\Payment;
+use Illuminate\Support\Facades\Cache;
 
 class PaymentStatisticsController extends Controller
 {
@@ -39,8 +40,10 @@ class PaymentStatisticsController extends Controller
         $paymentStatistics = $query->orderBy('created_at', 'desc')
             ->paginate(20);
         
-        // Calculate statistics for the authenticated user only
-        $statistics = $this->calculateStatistics();
+        // Calculate statistics for the authenticated user only (cached)
+        $statistics = Cache::remember($this->getStatsCacheKey(), now()->addMinutes(10), function () {
+            return $this->calculateStatistics();
+        });
         
         return view('paymentStatistics.index', compact('paymentStatistics', 'statistics'));
     }
@@ -167,6 +170,11 @@ class PaymentStatisticsController extends Controller
             'available_currencies' => $availableCurrencies
         ];
     }
+
+    private function getStatsCacheKey(): string
+    {
+        return 'payment_stats_summary_user_' . auth()->id();
+    }
     
     public function export()
     {
@@ -227,6 +235,9 @@ class PaymentStatisticsController extends Controller
 
         PaymentStatistics::create($request->all());
 
+        // Invalidate cached statistics for this user
+        Cache::forget($this->getStatsCacheKey());
+
         return redirect()->route('paymentStatistics.index')
             ->with('success', 'Payment statistic created successfully.');
     }
@@ -266,6 +277,9 @@ class PaymentStatisticsController extends Controller
 
         $payment_statistic->update($request->all());
 
+        // Invalidate cached statistics for this user
+        Cache::forget($this->getStatsCacheKey());
+
         return redirect()->route('paymentStatistics.index')
             ->with('success', 'Payment statistic updated successfully.');
     }
@@ -276,6 +290,9 @@ class PaymentStatisticsController extends Controller
         $this->authorizePaymentStatistic($payment_statistic);
         
         $payment_statistic->delete();
+
+        // Invalidate cached statistics for this user
+        Cache::forget($this->getStatsCacheKey());
 
         return redirect()->route('paymentStatistics.index')
             ->with('success', 'Payment statistic deleted successfully.');
