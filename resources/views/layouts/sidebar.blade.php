@@ -1,50 +1,51 @@
-<div class="rounded-md border bg-white shadow-sm">
-    <div class="border-b bg-gray-50 px-4 py-2">
-        <strong class="text-gray-700"><i class="fas fa-bars"></i> Menu</strong>
+<div class="card shadow-sm">
+    <div class="card-header bg-light">
+        <strong><i class="fas fa-bars"></i> Menu</strong>
     </div>
-    <nav class="divide-y">
-        <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('dashboard') ? 'page' : false }}">
-            <i class="fas fa-gauge me-2"></i> Dashboard
+    <div class="list-group list-group-flush">
+        <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action {{ request()->routeIs('dashboard') ? 'active' : '' }}" aria-current="{{ request()->routeIs('dashboard') ? 'page' : false }}">
+            <i class="fas fa-gauge"></i> Dashboard
         </a>
-        <a href="{{ route('rooms.index') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('rooms.*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('rooms.*') ? 'page' : false }}">
-            <i class="fas fa-bed me-2"></i> Rooms
+        <a href="{{ route('rooms.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('rooms.*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('rooms.*') ? 'page' : false }}">
+            <i class="fas fa-bed"></i> Rooms
         </a>
-        <a href="{{ route('students.index') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('students.*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('students.*') ? 'page' : false }}">
-            <i class="fas fa-users me-2"></i> Students
+        <a href="{{ route('students.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('students.*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('students.*') ? 'page' : false }}">
+            <i class="fas fa-users"></i> Students
         </a>
-        <a href="{{ route('bookings.index') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('bookings.*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('bookings.*') ? 'page' : false }}">
-            <i class="fas fa-calendar-check me-2"></i> Bookings
+        <a href="{{ route('bookings.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('bookings.*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('bookings.*') ? 'page' : false }}">
+            <i class="fas fa-calendar-check"></i> Bookings.
         </a>
-        <a href="{{ route('payments.index') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('payments.*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('payments.*') ? 'page' : false }}">
-            <i class="fas fa-money-bill me-2"></i> Payments
+        <a href="{{ route('payments.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('payments.*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('payments.*') ? 'page' : false }}">
+            <i class="fas fa-money-bill"></i> Payments
         </a>
-        <a href="{{ route('paymentStatistics.index') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('paymentStatistics*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('paymentStatistics*') ? 'page' : false }}">
-            <i class="fas fa-chart-bar me-2"></i> Payment Statistics
+        <a href="{{ route('paymentStatistics.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('paymentStatistics*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('paymentStatistics*') ? 'page' : false }}">
+            <i class="fas fa-chart-bar"></i> Payment Statistics
         </a>
-    </nav>
+    </div>
 </div>
 
-<div class="mt-3 rounded-md border bg-white shadow-sm">
-    <div class="border-b bg-gray-50 px-4 py-2">
-        <strong class="text-gray-700"><i class="fas fa-user"></i> Account</strong>
+<!-- Authentication Section -->
+<div class="card shadow-sm mt-3">
+    <div class="card-header bg-light">
+        <strong><i class="fas fa-user"></i> Account</strong>
     </div>
-    <div class="py-1">
+    <div class="list-group list-group-flush">
         @auth
-            <span class="block px-4 py-2 text-sm text-gray-500">
-                <i class="fas fa-user-circle me-2"></i> Welcome, {{ Auth::user()->name }}
+            <span class="list-group-item text-muted">
+                <i class="fas fa-user-circle"></i> Welcome, {{ Auth::user()->name }}
             </span>
-            <form method="POST" action="{{ route('logout') }}" class="px-4 pb-2">
+            <form method="POST" action="{{ route('logout') }}" class="d-inline">
                 @csrf
-                <button type="submit" class="w-full rounded bg-red-50 px-3 py-2 text-left text-sm text-red-600 hover:bg-red-100">
-                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                <button type="submit" class="list-group-item list-group-item-action text-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
             </form>
         @else
-            <a href="{{ route('login') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-sign-in-alt me-2"></i> Login
+            <a href="{{ route('login') }}" class="list-group-item list-group-item-action">
+                <i class="fas fa-sign-in-alt"></i> Login
             </a>
-            <a href="{{ route('register') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-user-plus me-2"></i> Register
+            <a href="{{ route('register') }}" class="list-group-item list-group-item-action">
+                <i class="fas fa-user-plus"></i> Register
             </a>
         @endauth
     </div>
