@@ -15,12 +15,12 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="bg-light">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3">
+    <div class="container-fluid layout-container">
+        <div class="row g-0 h-100">
+            <div class="col-md-3 layout-sidebar">
                 @include('layouts.sidebar')
             </div>
-            <div class="col-md-9">
+            <div class="col-md-9 layout-content">
                 <div class="p-4">
                     @yield('content')
                 </div>
