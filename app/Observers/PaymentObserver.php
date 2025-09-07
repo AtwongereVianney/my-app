@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Payment;
 use App\Models\PaymentStatistics;
+use Illuminate\Support\Facades\Cache;
 
 class PaymentObserver
 {
@@ -22,6 +23,9 @@ class PaymentObserver
                 'created_at' => $payment->created_at,
                 'updated_at' => $payment->updated_at,
             ]);
+
+            // Invalidate cache for the owning user
+            Cache::forget('payment_stats_summary_user_' . $payment->booking->student->user_id);
         }
     }
 
@@ -51,6 +55,9 @@ class PaymentObserver
                     'updated_at' => $payment->updated_at,
                 ]);
             }
+
+            // Invalidate cache for the owning user
+            Cache::forget('payment_stats_summary_user_' . $payment->booking->student->user_id);
         }
     }
 
@@ -61,6 +68,10 @@ class PaymentObserver
     {
         // Delete corresponding payment statistics
         PaymentStatistics::where('payment_id', $payment->id)->delete();
+
+        if ($payment->booking && $payment->booking->student && $payment->booking->student->user_id) {
+            Cache::forget('payment_stats_summary_user_' . $payment->booking->student->user_id);
+        }
     }
 
     /**
@@ -77,6 +88,10 @@ class PaymentObserver
             'created_at' => $payment->created_at,
             'updated_at' => $payment->updated_at,
         ]);
+
+        if ($payment->booking->student->user_id) {
+            Cache::forget('payment_stats_summary_user_' . $payment->booking->student->user_id);
+        }
     }
 
     /**
@@ -86,5 +101,9 @@ class PaymentObserver
     {
         // Delete corresponding payment statistics
         PaymentStatistics::where('payment_id', $payment->id)->forceDelete();
+
+        if ($payment->booking && $payment->booking->student && $payment->booking->student->user_id) {
+            Cache::forget('payment_stats_summary_user_' . $payment->booking->student->user_id);
+        }
     }
 }
