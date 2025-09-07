@@ -2,23 +2,23 @@
     <div class="border-b bg-gray-50 px-4 py-2">
         <strong class="text-gray-700"><i class="fas fa-bars"></i> Menu</strong>
     </div>
-    <nav class="py-1">
-        <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm rounded {{ request()->routeIs('dashboard') ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('dashboard') ? 'page' : false }}">
+    <nav class="divide-y">
+        <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('dashboard') ? 'page' : false }}">
             <i class="fas fa-gauge me-2"></i> Dashboard
         </a>
-        <a href="{{ route('rooms.index') }}" class="block px-4 py-2 text-sm rounded {{ request()->routeIs('rooms.*') ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('rooms.*') ? 'page' : false }}">
+        <a href="{{ route('rooms.index') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('rooms.*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('rooms.*') ? 'page' : false }}">
             <i class="fas fa-bed me-2"></i> Rooms
         </a>
-        <a href="{{ route('students.index') }}" class="block px-4 py-2 text-sm rounded {{ request()->routeIs('students.*') ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('students.*') ? 'page' : false }}">
+        <a href="{{ route('students.index') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('students.*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('students.*') ? 'page' : false }}">
             <i class="fas fa-users me-2"></i> Students
         </a>
-        <a href="{{ route('bookings.index') }}" class="block px-4 py-2 text-sm rounded {{ request()->routeIs('bookings.*') ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('bookings.*') ? 'page' : false }}">
+        <a href="{{ route('bookings.index') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('bookings.*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('bookings.*') ? 'page' : false }}">
             <i class="fas fa-calendar-check me-2"></i> Bookings
         </a>
-        <a href="{{ route('payments.index') }}" class="block px-4 py-2 text-sm rounded {{ request()->routeIs('payments.*') ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('payments.*') ? 'page' : false }}">
+        <a href="{{ route('payments.index') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('payments.*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('payments.*') ? 'page' : false }}">
             <i class="fas fa-money-bill me-2"></i> Payments
         </a>
-        <a href="{{ route('paymentStatistics.index') }}" class="block px-4 py-2 text-sm rounded {{ request()->routeIs('paymentStatistics*') ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('paymentStatistics*') ? 'page' : false }}">
+        <a href="{{ route('paymentStatistics.index') }}" class="block px-4 py-2 text-sm {{ request()->routeIs('paymentStatistics*') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100' }}" aria-current="{{ request()->routeIs('paymentStatistics*') ? 'page' : false }}">
             <i class="fas fa-chart-bar me-2"></i> Payment Statistics
         </a>
     </nav>
