@@ -1614,3 +1614,8 @@ select {
   }
 }
 
+/* Custom layout for independent scrolling */
+html, body { height: 100%; }
+.layout-container { min-height: 100vh; }
+.layout-sidebar { height: 100vh; overflow-y: auto; position: sticky; top: 0; }
+.layout-content { height: 100vh; overflow-y: auto; }
