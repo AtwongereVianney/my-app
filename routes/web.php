@@ -22,6 +22,12 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+// Public guest booking routes
+Route::get('/rooms/{room}/book', [BookingController::class, 'guestCreate'])->name('guest.book.create');
+Route::post('/rooms/{room}/book', [BookingController::class, 'guestStore'])->name('guest.book.store');
+Route::get('/guest/bookings/{token}', [BookingController::class, 'guestShow'])->name('guest.book.show');
+Route::post('/guest/bookings/{token}/cancel', [BookingController::class, 'guestCancel'])->name('guest.book.cancel');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');

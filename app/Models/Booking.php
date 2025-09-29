@@ -16,6 +16,10 @@ class Booking extends Model
         'start_date',
         'end_date',
         'status',
+        'guest_name',
+        'guest_email',
+        'guest_phone',
+        'guest_access_token',
     ];
 
     protected $casts = [
