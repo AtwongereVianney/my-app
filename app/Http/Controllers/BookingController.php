@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Student;
 use App\Models\Room;
+use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
@@ -166,5 +167,78 @@ class BookingController extends Controller
         $bookings = Booking::onlyTrashed()->with(['student', 'room'])->latest()->paginate(10);
         
         return view('bookings.trashed', compact('bookings'));
+    }
+
+    /**
+     * Show guest booking form for a specific room (no auth required).
+     */
+    public function guestCreate(Room $room)
+    {
+        abort_unless($room->is_available, 404);
+
+        return view('bookings.guest-create', [
+            'room' => $room,
+        ]);
+    }
+
+    /**
+     * Store guest booking (no auth required).
+     */
+    public function guestStore(Request $request, Room $room)
+    {
+        abort_unless($room->is_available, 404);
+
+        $validated = $request->validate([
+            'guest_name' => 'required|string|max:255',
+            'guest_email' => 'required|email|max:255',
+            'guest_phone' => 'nullable|string|max:50',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $guestToken = Str::random(40);
+
+        $booking = Booking::create([
+            'student_id' => null,
+            'room_id' => $room->id,
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'] ?? null,
+            'status' => 'active',
+            'guest_name' => $validated['guest_name'],
+            'guest_email' => $validated['guest_email'],
+            'guest_phone' => $validated['guest_phone'] ?? null,
+            'guest_access_token' => $guestToken,
+        ]);
+
+        // Optionally mark room unavailable or keep availability logic elsewhere
+        // $room->update(['is_available' => false]);
+
+        return redirect()->route('guest.book.show', $guestToken)
+            ->with('success', 'Booking created successfully. Keep this link to manage your booking.');
+    }
+
+    /**
+     * Show a guest booking by token.
+     */
+    public function guestShow(string $token)
+    {
+        $booking = Booking::where('guest_access_token', $token)->with('room')->firstOrFail();
+
+        return view('bookings.guest-show', [
+            'booking' => $booking,
+        ]);
+    }
+
+    /**
+     * Guest cancels booking by token.
+     */
+    public function guestCancel(Request $request, string $token)
+    {
+        $booking = Booking::where('guest_access_token', $token)->firstOrFail();
+
+        $booking->update(['status' => 'cancelled']);
+
+        return redirect()->route('guest.book.show', $token)
+            ->with('success', 'Booking cancelled successfully.');
     }
 }
